@@ -4,6 +4,7 @@
   "description": "CS314 term long chat messaging project",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brian Cabrera Diaz, Rowan Sheets",
