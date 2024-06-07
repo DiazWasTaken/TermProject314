@@ -7,7 +7,7 @@ const { Server } = require('socket.io');
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
-const port = process.env.PORT || 4000;
+//const port = process.env.PORT || 4000;
 
 //import required modules
 require("dotenv").config(); //ensures that all the variables from '.env' are avaiable
@@ -36,6 +36,13 @@ app.use(auth(config));
 //trying to make the website work with authentication
 // ... your other middleware/route handlers ...
 
+mongoose
+.connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log("MongoDB connection established"))
+.catch((err) => console.error("MongoDB connection error:", err));
 
 
 // Login route
@@ -45,49 +52,51 @@ app.get('/login', (req, res) => {
 
 function ensureAuthenticated(req, res, next) {
   if (req.oidc.isAuthenticated()) {
+    // Protected route (accessible only when authenticated)
+  app.get('/', ensureAuthenticated, (req, res) => {
+    // ALl of the messaging code goes in here, since you only get to it after authenticating
+  /*
+    mongoose
+      .connect(mongoURI, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+      })
+      .then(() => console.log("MongoDB connection established"))
+      .catch((err) => console.error("MongoDB connection error:", err));
+*/
+  io.on('connection', (socket) => {
+      console.log('a user connected');
+      socket.on('disconnect', () => {
+        console.log('user disconnected');
+      });
+    });
+
+  io.on('connection', (socket) => {
+      socket.on('chat message', (msg) => {
+        console.log('message: ' + msg);
+      });
+    });
+
+  io.on('connection', (socket) => {
+      socket.on('chat message', (msg) => {
+        io.emit('chat message', msg);
+
+        const messageToSave = new Message({ message: msg });
+
+        messageToSave.save();
+      });
+    });
+  server.listen(3000, () => {
+    console.log('server running at http://localhost:3000');
+  });
+
+  });
     return next(); // Proceed to the next middleware/route handler
   }
   res.redirect('/login'); // Redirect to login if not authenticated
 }
 
-// Protected route (accessible only when authenticated)
-app.get('/', ensureAuthenticated, (req, res) => {
-  // ALl of the messaging code goes in here, since you only get to it after authenticating
-  mongoose
-    .connect(mongoURI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => console.log("MongoDB connection established"))
-    .catch((err) => console.error("MongoDB connection error:", err));
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
-    });
-  });
-
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-      console.log('message: ' + msg);
-    });
-  });
-
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-      io.emit('chat message', msg);
-
-      const messageToSave = new Message({ message: msg });
-
-      messageToSave.save();
-    });
-  });
-server.listen(3000, () => {
-  console.log('server running at http://localhost:3000');
-});
-
-});
 
 /*
 // Login route
