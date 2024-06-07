@@ -19,7 +19,7 @@ const Message = mongoose.model("Message");
 const { auth, requiresAuth } = require('express-openid-connect');
 
 const config = {
-  authRequired: false,
+  authRequired: true,//changed to true
   auth0Logout: true,
   secret: 'H3U8gvAlhSEhYQRZDIXV3tu1IsHQgOiKwrKbothX19Yd2P5bOIyloo2OR_B1kZ5_',
   baseURL: 'https://termproject314.onrender.com',
@@ -32,12 +32,28 @@ const config = {
 // and /callback routes to the baseURL
 app.use(auth(config));
 
+//new code trying to jump past the login
+app.get('/', (req, res) => {
+  if (req.oidc.isAuthenticated()) {
+    // User is logged in, proceed with further logic
+    // ... your code for rendering the chat app or main page ...
+    return; // Add this line to immediately exit the function 
+  } else {
+    // User is not logged in, redirect to Auth0 login
+    res.oidc.login({
+      returnTo: 'https://termproject314.onrender.com/login'
+    });
+  }
+});
+
+/* Original code
 // req.oidc.isAuthenticated is provided from the auth router
 app.get('/', (req, res) => {
   res.send(
     req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out'
   )
 });
+*/
 
 // The /profile route will show the user profile as JSON
 app.get('/profile', requiresAuth(), (req, res) => {
