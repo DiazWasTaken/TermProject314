@@ -32,40 +32,27 @@ const config = {
 // and /callback routes to the baseURL
 app.use(auth(config));
 
-// req.oidc.isAuthenticated is provided from the auth router
-app.get('/', (req, res) => {
-  res.send(
-    req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out'
-  )
-});
+//trying to make the website work with authentication
+// ... your other middleware/route handlers ...
 
-// The /profile route will show the user profile as JSON
-app.get('/profile', requiresAuth(), (req, res) => {
-  res.send(JSON.stringify(req.oidc.user, null, 2));
-});
+function ensureAuthenticated(req, res, next) {
+  if (req.oidc.isAuthenticated()) {
+    return next(); // Proceed to the next middleware/route handler
+  }
+  res.redirect('/login'); // Redirect to login if not authenticated
+}
 
-/*
-app.listen(3000, function() {
-  console.log('Listening on http://localhost:3000');
-});
-*/
-
-
-
-
-//EVERYTHING BELOW HERE IS BASELINE
-mongoose
+// Protected route (accessible only when authenticated)
+app.get('/', ensureAuthenticated, (req, res) => {
+  // ALl of the messaging code goes in here, since you only get to it after authenticating
+  mongoose
     .connect(mongoURI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
     .then(() => console.log("MongoDB connection established"))
     .catch((err) => console.error("MongoDB connection error:", err));
-/*
-app.get('/', (req, res) => {
-  res.sendFile(join(__dirname, 'index.html'));
-});
-*/
+
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('disconnect', () => {
@@ -91,3 +78,62 @@ io.on('connection', (socket) => {
 server.listen(3000, () => {
   console.log('server running at http://localhost:3000');
 });
+
+});
+
+// Login route
+app.get('/login', (req, res) => {
+  res.render('login'); // Render your login page
+});
+
+/*
+// req.oidc.isAuthenticated is provided from the auth router
+app.get('/', (req, res) => {
+  res.send(
+    req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out'
+  )
+});
+
+// The /profile route will show the user profile as JSON
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user, null, 2));
+});
+*/
+
+
+//EVERYTHING BELOW HERE IS BASELINE
+/*
+mongoose
+    .connect(mongoURI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log("MongoDB connection established"))
+    .catch((err) => console.error("MongoDB connection error:", err));
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
+    });
+  });
+
+io.on('connection', (socket) => {
+    socket.on('chat message', (msg) => {
+      console.log('message: ' + msg);
+    });
+  });
+
+io.on('connection', (socket) => {
+    socket.on('chat message', (msg) => {
+      io.emit('chat message', msg);
+
+      const messageToSave = new Message({ message: msg });
+
+      messageToSave.save();
+    });
+  });
+server.listen(3000, () => {
+  console.log('server running at http://localhost:3000');
+});
+*/
