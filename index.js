@@ -1,6 +1,5 @@
 
 const express = require('express');
-const { auth, requiresAuth } = require('express-openid-connect');
 const { createServer } = require('node:http');
 const { join } = require('node:path');
 const { Server } = require('socket.io');
@@ -17,7 +16,7 @@ const mongoURI = process.env.DATABASE;
 require("./model/message");
 const Message = mongoose.model("Message");
 //this is for Auth0 attempt
-const { auth } = require('express-openid-connect');
+const { auth, requiresAuth  } = require('express-openid-connect');
 
 const config = {
   authRequired: false,
