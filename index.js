@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 passport.use(new GoogleStrategy({
     clientID: '496285652496-g3gr2choo6q32fff78eh3pk1kouub5pc.apps.googleusercontent.com',
     clientSecret: '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',
-    callbackURL: 'http://localhost:3000/google/callback',
+    callbackURL: 'https://termproject314.onrender.com',
     scope: ['profile', 'email']
   }, (accessToken, refreshToken, profile, done) => {
     // Find or create user in your database using profile.id or profile.email

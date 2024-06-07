@@ -15,6 +15,17 @@
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
     </style>
+    <h1>My Chat App</h1>  <button id="sign-in-btn">
+      <a href="${passport.authenticate('google', { scope: ['profile', 'email'] })}">
+        Sign in with Google        </a>
+      </button>
+      <style>
+        #sign-in-btn {
+          position: absolute; /* Absolute positioning relative to its nearest positioned ancestor (header in this case) */
+          top: 0.5rem; /* Adjust for desired top margin from the top */
+          left: 0.5rem; /* Adjust for desired left margin from the left */
+        }
+      </style>
   </head>
   <body>
     <ul id="messages"></ul>

@@ -9,7 +9,7 @@ const GOOGLE_CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
 passport.use(new GoogleStrategy({
   clientID: '496285652496-g3gr2choo6q32fff78eh3pk1kouub5pc.apps.googleusercontent.com',
   clientSecret: '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',
-  callbackURL: 'http://localhost:3000/google/callback',
+  callbackURL: 'https://termproject314.onrender.com',
   scope: ['profile', 'email'] // Request user profile and email information
 }, (accessToken, refreshToken, profile, done) => {
   // Find or create the user in your database based on their Google profile ID
