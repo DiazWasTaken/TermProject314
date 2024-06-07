@@ -1,5 +1,6 @@
 
 const express = require('express');
+const { auth, requiresAuth } = require('express-openid-connect');
 const { createServer } = require('node:http');
 const { join } = require('node:path');
 const { Server } = require('socket.io');
