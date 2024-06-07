@@ -7,8 +7,8 @@ const GOOGLE_CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
 
 // Configure the GoogleStrategy for Passport.js
 passport.use(new GoogleStrategy({
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
+  clientID: '496285652496-g3gr2choo6q32fff78eh3pk1kouub5pc.apps.googleusercontent.com',
+  clientSecret: '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',
   callbackURL: 'http://localhost:3000/google/callback',
   scope: ['profile', 'email'] // Request user profile and email information
 }, (accessToken, refreshToken, profile, done) => {
