@@ -7,6 +7,7 @@ const { Server } = require('socket.io');
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
+const port = process.env.PORT || 4000;
 
 //import required modules
 require("dotenv").config(); //ensures that all the variables from '.env' are avaiable
@@ -34,6 +35,8 @@ app.use(auth(config));
 
 //trying to make the website work with authentication
 // ... your other middleware/route handlers ...
+
+
 
 // Login route
 app.get('/login', (req, res) => {
