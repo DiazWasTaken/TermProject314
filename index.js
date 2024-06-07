@@ -35,6 +35,11 @@ app.use(auth(config));
 //trying to make the website work with authentication
 // ... your other middleware/route handlers ...
 
+// Login route
+app.get('/login', (req, res) => {
+  res.render('login'); // Render your login page
+});
+
 function ensureAuthenticated(req, res, next) {
   if (req.oidc.isAuthenticated()) {
     return next(); // Proceed to the next middleware/route handler
@@ -81,12 +86,13 @@ server.listen(3000, () => {
 
 });
 
+/*
 // Login route
 app.get('/login', (req, res) => {
   res.render('login'); // Render your login page
 });
 
-/*
+
 // req.oidc.isAuthenticated is provided from the auth router
 app.get('/', (req, res) => {
   res.send(
