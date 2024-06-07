@@ -16,7 +16,7 @@ const mongoURI = process.env.DATABASE;
 require("./model/message");
 const Message = mongoose.model("Message");
 //this is for Auth0 attempt
-const { auth, requiresAuth  } = require('express-openid-connect');
+const { auth, requiresAuth } = require('express-openid-connect');
 
 const config = {
   authRequired: false,
@@ -28,18 +28,27 @@ const config = {
 };
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
+// The `auth` router attaches /login, /logout
+// and /callback routes to the baseURL
 app.use(auth(config));
 
-// req.isAuthenticated is provided from the auth router
+// req.oidc.isAuthenticated is provided from the auth router
 app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+  res.send(
+    req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out'
+  )
 });
 
-const { requiresAuth } = require('express-openid-connect');
-
+// The /profile route will show the user profile as JSON
 app.get('/profile', requiresAuth(), (req, res) => {
-  res.send(JSON.stringify(req.oidc.user));
+  res.send(JSON.stringify(req.oidc.user, null, 2));
 });
+
+app.listen(3000, function() {
+  console.log('Listening on http://localhost:3000');
+});
+
+
 
 
 
