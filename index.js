@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 
 //Google passport stuff
 passport.use(new GoogleStrategy({
-    clientID: 496285652496-g3gr2choo6q32fff78eh3pk1kouub5pc.apps.googleusercontent.com,
+    clientID: '496285652496-g3gr2choo6q32fff78eh3pk1kouub5pc.apps.googleusercontent.com',
     clientSecret: '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',
     callbackURL: 'https://termproject314.onrender.com/oauth2/callback',
     scope: ['profile', 'email']
