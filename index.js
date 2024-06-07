@@ -1,3 +1,36 @@
+//import the firebase library
+import { initializeApp} from 'firebase/app';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+//unclear whether or not this is needed
+import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+
+
+//sets up the firebase app with my settings or whatever
+const firebaseConfig = {
+  apiKey: "AIzaSyBY3yRdndtqVTMhuEbqSSQqmMzVAifcC8I",
+  authDomain: "cs314termproject.firebaseapp.com",
+  projectId: "cs314termproject",
+  storageBucket: "cs314termproject.appspot.com",
+  messagingSenderId: "418036102427",
+  appId: "1:418036102427:web:6701f93073d9f1e11b0fbe",
+  measurementId: "G-8P72BTSRRC"
+};
+const firebaseApp = initializeApp(firebaseConfig);
+
+//uses unclear firebase store 
+const db = getFirestore(firebaseApp);
+
+//even more unclear
+// Get a list of cities from your database
+async function getCities(db) {
+  const citiesCol = collection(db, 'cities');
+  const citySnapshot = await getDocs(citiesCol);
+  const cityList = citySnapshot.docs.map(doc => doc.data());
+  return cityList;
+};
+
+
+
 const express = require('express');
 const { createServer } = require('node:http');
 const { join } = require('node:path');
@@ -14,8 +47,11 @@ const mongoose = require("mongoose");
 const mongoURI = process.env.DATABASE;
 require("./model/message");
 const Message = mongoose.model("Message");
+//assuming this is where i can place all of the stuff that isnt const or setting up
+// this is for firebase setup
 
 
+//EVERYTHING BELOW HERE IS BASELINE
 mongoose
     .connect(mongoURI, {
         useNewUrlParser: true,
