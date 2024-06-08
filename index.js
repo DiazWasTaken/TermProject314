@@ -74,11 +74,11 @@ mongoose
     })
     .then(() => console.log("MongoDB connection established"))
     .catch((err) => console.error("MongoDB connection error:", err));
-/*
+
 app.get('/', (req, res) => {
   res.sendFile(join(__dirname, 'index.html'));
 });
-*/
+
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('disconnect', () => {
