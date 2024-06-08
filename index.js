@@ -19,7 +19,7 @@ const Message = mongoose.model("Message");
 const { auth, requiresAuth } = require('express-openid-connect');
 
 const config = {
-  authRequired: true,//changed to true
+  authRequired: false,
   auth0Logout: true,
   secret: 'H3U8gvAlhSEhYQRZDIXV3tu1IsHQgOiKwrKbothX19Yd2P5bOIyloo2OR_B1kZ5_',
   baseURL: 'https://termproject314.onrender.com',
