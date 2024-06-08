@@ -32,13 +32,15 @@ const config = {
 // and /callback routes to the baseURL
 app.use(auth(config));
 
+
+/*
 //code trying to remake the original code, but trying to let the rest of the code actually work
 app.get('/', (req, res) => {
   if (!req.oidc.isAuthenticated()) {
     res.send('Logged out');
   }
 });
-
+/*
 /* Original code
 // req.oidc.isAuthenticated is provided from the auth router
 app.get('/', (req, res) => {
@@ -48,11 +50,12 @@ app.get('/', (req, res) => {
 });
 */
 
+/*
 // The /profile route will show the user profile as JSON
 app.get('/profile', requiresAuth(), (req, res) => {
   res.send(JSON.stringify(req.oidc.user, null, 2));
 });
-
+*/
 /*
 app.listen(3000, function() {
   console.log('Listening on http://localhost:3000');
