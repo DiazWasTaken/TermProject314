@@ -32,17 +32,10 @@ const config = {
 // and /callback routes to the baseURL
 app.use(auth(config));
 
-//new code trying to jump past the login
+//code trying to remake the original code, but trying to let the rest of the code actually work
 app.get('/', (req, res) => {
-  if (req.oidc.isAuthenticated()) {
-    // User is logged in, proceed with further logic
-    // ... your code for rendering the chat app or main page ...
-    return; // Add this line to immediately exit the function 
-  } else {
-    // User is not logged in, redirect to Auth0 login
-    res.oidc.login({
-      returnTo: 'https://termproject314.onrender.com/login'
-    });
+  if (!req.oidc.isAuthenticated()) {
+    res.send('Logged out');
   }
 });
 
