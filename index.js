@@ -16,6 +16,7 @@ const mongoURI = process.env.DATABASE;
 require("./model/message");
 const Message = mongoose.model("Message");
 //this is for Auth0 attempt
+/*
 const { auth, requiresAuth } = require('express-openid-connect');
 
 const config = {
@@ -26,7 +27,7 @@ const config = {
   clientID: 'NmvvDKW0LaPZwXGF3vnjGSvWUeE5AKHt',
   issuerBaseURL: 'https://dev-yvldmmdm6yil6dfe.us.auth0.com'
 };
-
+*/
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 // The `auth` router attaches /login, /logout
 // and /callback routes to the baseURL
