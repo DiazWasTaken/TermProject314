@@ -23,7 +23,7 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: 'H3U8gvAlhSEhYQRZDIXV3tu1IsHQgOiKwrKbothX19Yd2P5bOIyloo2OR_B1kZ5_',
-  baseURL: 'https://termproject314.onrender.com',
+  baseURL: 'http://localhost:3000',
   clientID: 'NmvvDKW0LaPZwXGF3vnjGSvWUeE5AKHt',
   issuerBaseURL: 'https://dev-yvldmmdm6yil6dfe.us.auth0.com'
 };
@@ -82,6 +82,7 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('a user connected');
+    getMessages(socket);
     socket.on('disconnect', () => {
       console.log('user disconnected');
     });
@@ -102,6 +103,14 @@ io.on('connection', (socket) => {
       messageToSave.save();
     });
   });
+
+async function getMessages(socket) {
+  result = await Message.find({}, 'message');
+  result.forEach((message) => {
+    socket.emit('chat message', message.message);
+  });
+};
+
 server.listen(3000, () => {
   console.log('server running at http://localhost:3000');
 });
