@@ -1,3 +1,4 @@
+
 const express = require('express');
 const { createServer } = require('node:http');
 const { join } = require('node:path');
@@ -14,8 +15,59 @@ const mongoose = require("mongoose");
 const mongoURI = process.env.DATABASE;
 require("./model/message");
 const Message = mongoose.model("Message");
+//this is for Auth0 attempt
+
+const { auth, requiresAuth } = require('express-openid-connect');
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'H3U8gvAlhSEhYQRZDIXV3tu1IsHQgOiKwrKbothX19Yd2P5bOIyloo2OR_B1kZ5_',
+  baseURL: 'http://localhost:3000',
+  clientID: 'NmvvDKW0LaPZwXGF3vnjGSvWUeE5AKHt',
+  issuerBaseURL: 'https://dev-yvldmmdm6yil6dfe.us.auth0.com'
+};
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+// The `auth` router attaches /login, /logout
+// and /callback routes to the baseURL
+app.use(auth(config));
 
 
+
+//code trying to remake the original code, but trying to let the rest of the code actually work
+app.get('/login', (req, res, next) => { 
+  if (!req.oidc.isAuthenticated()) {
+    res.send('auth failed');
+    return; 
+  }
+  next(); // Proceed to the next middleware/route handler
+});
+/* Original code
+// req.oidc.isAuthenticated is provided from the auth router
+app.get('/', (req, res) => {
+  res.send(
+    req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out'
+  )
+});
+*/
+
+/*
+// The /profile route will show the user profile as JSON
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user, null, 2));
+});
+*/
+/*
+app.listen(3000, function() {
+  console.log('Listening on http://localhost:3000');
+});
+*/
+
+
+
+
+//EVERYTHING BELOW HERE IS BASELINE
 mongoose
     .connect(mongoURI, {
         useNewUrlParser: true,
@@ -30,6 +82,7 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('a user connected');
+    getMessages(socket);
     socket.on('disconnect', () => {
       console.log('user disconnected');
     });
@@ -50,6 +103,14 @@ io.on('connection', (socket) => {
       messageToSave.save();
     });
   });
+
+async function getMessages(socket) {
+  result = await Message.find({}, 'message');
+  result.forEach((message) => {
+    socket.emit('chat message', message.message);
+  });
+};
+
 server.listen(3000, () => {
   console.log('server running at http://localhost:3000');
 });
